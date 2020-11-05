@@ -2,7 +2,7 @@
 
 class AbstractPreProcessCSV:
     def __init__(self):
-        raise NotImplementedError
+        pass
 
     def get_size(self):
         raise NotImplementedError
@@ -14,7 +14,7 @@ class AbstractPreProcessCSV:
         raise NotImplementedError
 
     def to_list(self):
-        raise NotImplementedError
+        pass
 
 class PrePRocessCSVPandas(AbstractPreProcessCSV):
     def __init__(self, data):
@@ -50,9 +50,23 @@ class PreProcessCSVSpark(AbstractPreProcessCSV):
         super(PreProcessCSVSpark, self).__init__()
         self.data = data
 
+    def get_size(self):
+        """
+
+        :return:
+        """
+        return self.data.shape
+
+
     def remove_cols_by_name(self, column_names):
         self.data = self.data.drop(columns=column_names)
 
+
+    def add_col_by_name(self, column_name, input_data):
+        pass
+
+    def to_list(self):
+        return self.data.toPandas().values.tolist()
 
 class PreProcessCSV:
 
