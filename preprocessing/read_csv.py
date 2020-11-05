@@ -1,5 +1,59 @@
 
 
+class AbstractPreProcessCSV:
+    def __init__(self):
+        raise NotImplementedError
+
+    def get_size(self):
+        raise NotImplementedError
+
+    def remove_col_by_name(self, column_name):
+        raise NotImplementedError
+
+    def add_col_by_name(self, column_name, input_data):
+        raise NotImplementedError
+
+    def to_list(self):
+        raise NotImplementedError
+
+class PrePRocessCSVPandas(AbstractPreProcessCSV):
+    def __init__(self, data):
+        """
+
+        :param data:
+        """
+        super(PrePRocessCSVPandas, self).__init__()
+        self.data = data
+
+    def get_size(self):
+        """
+
+        :return:
+        """
+        return self.data.shape
+
+    def remove_col_by_name(self, column_name):
+        """
+
+        :return:
+        """
+        assert type(column_name) == str
+        del self.data[column_name]
+
+    def add_col_by_name(self, column_name, input_data):
+        assert len(input_data) == len(self.data.index)
+        self.data[column_name] = input_data
+
+
+class PreProcessCSVSpark(AbstractPreProcessCSV):
+    def __init__(self, data):
+        super(PreProcessCSVSpark, self).__init__()
+        self.data = data
+
+    def remove_cols_by_name(self, column_names):
+        self.data = self.data.drop(columns=column_names)
+
+
 class PreProcessCSV:
 
     def __init__(self, data):
@@ -22,6 +76,8 @@ class PreProcessCSV:
 
     def remove_col_by_name(self, column_name):
         """
+        Maybe column_name can be also a list and thus we can drop a list of columns
+        Maybe we can perform similar procedure with
         Removes a column from Pandas DataFrame by name
         :param column_name: The name of the column we would like to remove
         :return: None
@@ -45,3 +101,4 @@ class PreProcessCSV:
         :return: A list of lists
         """
         return self.data.values.tolist()
+
