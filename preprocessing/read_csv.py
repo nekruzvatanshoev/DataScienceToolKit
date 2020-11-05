@@ -16,33 +16,6 @@ class AbstractPreProcessCSV:
     def to_list(self):
         pass
 
-class PrePRocessCSVPandas(AbstractPreProcessCSV):
-    def __init__(self, data):
-        """
-
-        :param data:
-        """
-        super(PrePRocessCSVPandas, self).__init__()
-        self.data = data
-
-    def get_size(self):
-        """
-
-        :return:
-        """
-        return self.data.shape
-
-    def remove_col_by_name(self, column_name):
-        """
-
-        :return:
-        """
-        assert type(column_name) == str
-        del self.data[column_name]
-
-    def add_col_by_name(self, column_name, input_data):
-        assert len(input_data) == len(self.data.index)
-        self.data[column_name] = input_data
 
 
 class PreProcessCSVSpark(AbstractPreProcessCSV):
@@ -68,9 +41,10 @@ class PreProcessCSVSpark(AbstractPreProcessCSV):
     def to_list(self):
         return self.data.toPandas().values.tolist()
 
-class PreProcessCSV:
+class PreProcessCSVPandas(AbstractPreProcessCSV):
 
     def __init__(self, data):
+        super().__init__()
         """
         import pandas as pd
 
@@ -107,7 +81,10 @@ class PreProcessCSV:
         :return: None
         """
         assert len(input_data) == len(self.data.index)
-        self.data[column_name] = input_data
+
+        num_cols = len(self.data.columns) - 1
+        self.data.insert(loc=num_cols, column=column_name, value=input_data)
+
 
     def to_list(self):
         """
