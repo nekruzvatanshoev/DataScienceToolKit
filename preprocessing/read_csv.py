@@ -41,6 +41,17 @@ class PreProcessCSVSpark(AbstractPreProcessCSV):
     def to_list(self):
         return self.data.toPandas().values.tolist()
 
+    def to_show(self, top_n=10, truncate=False, vertical=False):
+        """
+        Displays the DataFrame vertically with rows in the first column being the columns in the DataFrame
+        and the values in the second individual record
+        :param top_n: Display the top n rows (records)
+        :param truncate:
+        :param vertical:
+        :return:
+        """
+        self.data.show(top_n, truncate=truncate, vertical=vertical)
+
 class PreProcessCSVPandas(AbstractPreProcessCSV):
 
     def __init__(self, data):
@@ -93,3 +104,48 @@ class PreProcessCSVPandas(AbstractPreProcessCSV):
         """
         return self.data.values.tolist()
 
+
+# from pyspark.sql import SparkSession
+#
+#
+# spark = SparkSession.builder.appName("data_processing").getOrCreate()
+# import pyspark.sql.functions as F
+# from pyspark.sql.types import StructType, FloatType
+# schema = StructType().add("user_id", "string")\
+#     .add("country", "string").add("browser", "string") \
+#     .add("OS", "string").add("age", "integer")
+#
+#
+# df = spark.createDataFrame([("A203", "India", "Chrome", "WIN", 33),
+#                             ("A201", "China", "Safari", "MacOS", 35),
+#                             ("A205", "UK", "Mozilla", "Linux", 25)], schema=schema)
+# df.printSchema()
+# df.show()
+# df = df.drop('OS')
+# df.show()
+# data = PreProcessCSVSpark(df)
+# print(data.to_list())
+#
+# new_schema = StructType().add("distance", "integer").add("height", "integer")
+# print(new_schema)
+#
+# distance = [10, 15, 20]
+# new_df = spark.createDataFrame([
+#     (10,1),(15,2),(20,3)
+# ], schema=new_schema)
+#
+# df = df.withColumn()
+# df.show()
+
+
+# import pandas as pd
+#
+# data = pd.read_csv("/home/nekruz/pythonProject/PythonOOP/train.csv")
+# df = PreProcessCSVPandas(data)
+# print(df.data)
+# df.remove_col_by_name("R")
+# print(df.data)
+# arr = [x for x in range(106)]
+# df.add_col_by_name("NEW", arr)
+# print(df.data)
+# print(df.to_list())
