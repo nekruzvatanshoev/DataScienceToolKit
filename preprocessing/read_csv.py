@@ -16,6 +16,8 @@ class AbstractPreProcessCSV:
     def to_list(self):
         pass
 
+    def to_csv(self, file_name):
+        raise NotImplementedError
 
 
 class PreProcessCSVSpark(AbstractPreProcessCSV):
@@ -36,9 +38,19 @@ class PreProcessCSVSpark(AbstractPreProcessCSV):
 
 
     def add_col_by_name(self, column_name, input_data):
+        """
+
+        :param column_name:
+        :param input_data:
+        :return:
+        """
         pass
 
     def to_list(self):
+        """
+
+        :return:
+        """
         return self.data.toPandas().values.tolist()
 
     def to_show(self, top_n=10, truncate=False, vertical=False):
@@ -51,6 +63,9 @@ class PreProcessCSVSpark(AbstractPreProcessCSV):
         :return:
         """
         self.data.show(top_n, truncate=truncate, vertical=vertical)
+
+    def to_csv(self, file_name):
+        self.data.write.csv(file_name=file_name)
 
 class PreProcessCSVPandas(AbstractPreProcessCSV):
 
@@ -104,6 +119,8 @@ class PreProcessCSVPandas(AbstractPreProcessCSV):
         """
         return self.data.values.tolist()
 
+    def to_csv(self, file_name):
+        self.data.to_csv(file_name=file_name)
 
 # from pyspark.sql import SparkSession
 #
